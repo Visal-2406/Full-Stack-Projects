@@ -17,16 +17,16 @@ const interviewReportSchema = z.object({
         question: z.string().describe("The behavioral question that can be asked in the interview"),
         intention: z.string().describe("The intention of the interviewer behind asking this question"),
         answer: z.string().describe("How to answer this question, what points to cover, what approach to take etc.")
-    })).describe("Behavioral questions that can be asked in the interview along with their intention and how to answer them"),
+    })).describe("Behavioral questions that can be asked in the interview along with their intention and how to answer them "),
     skillGaps: z.array(z.object({
         skill: z.string().describe("The skill which the candidate is lacking"),
         severity: z.enum(["low","medium","high"]).describe("The severity of this skill gap")
     })).describe("List of skill gaps in the candidate's profile along with their severity"),
     preparationPlan: z.array(z.object({
-        day: z.number().describe(""),
-        focus: z.string().describe(""),
-        tasks: z.array(z.string()).describe("")
-    })).describe("")
+        day: z.number().describe("The day number in the preparation plan, starting from 1"),
+        focus: z.string().describe("The main focus of the preparation for this day, e.g., technical skills, behavioral skills, etc."),
+        tasks: z.array(z.string()).describe("List of tasks to be completed on this day to prepare for the interview")
+    })).describe("A day-wise preparation plan for the candidate to improve their chances of success in the interview")
 })
 
 async function generateInterviewReport({resume,selfDescription,jobDescription}){
@@ -44,7 +44,7 @@ async function generateInterviewReport({resume,selfDescription,jobDescription}){
             responseSchema: zodToJsonSchema(interviewReportSchema)
         }
     })
-    console.log(response.text)
+    return JSON.parse(response.text)
 }
 
 module.exports = generateInterviewReport
